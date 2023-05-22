@@ -12,29 +12,19 @@ namespace sqlgyak
 		char jazon;
 		int eOra;
 		int ePerc;
-		int vÓra;
+		int vOra;
 		int vPerc;
-		public Kolcsonzes(string csvSor)
+		public int IdoHoszz()
 		{
-            var mezok = csvSor.Split(';');
-
-            this.nev = mezok[0];
-            this.jazon = mezok[1][0];
-            this.eOra = int.Parse(mezok[2]);
-            this.ePerc = int.Parse(mezok[3]);
-            this.vÓra = int.Parse(mezok[4]);
-            this.vPerc = int.Parse(mezok[5]);
-
-
-            Kolcsonzes beolvas = new Kolcsonzes(mezok[0], mezok[1][0], int.Parse(mezok[2]), int.Parse(mezok[3]), int.Parse(mezok[4]), int.Parse(mezok[5]));
-        }
-		public Kolcsonzes(string nev, char jazon, int eOra, int ePerc, int vÓra, int vPerc )
+			return vOra * 60 + VPerc - (EOra * 60 + ePerc);
+		}
+		public Kolcsonzes(string nev, char jazon, int eOra, int ePerc, int vOra, int vPerc )
 		{
 			this.nev = nev;
 			this.jazon = jazon;
 			this.eOra = eOra;
 			this.ePerc = ePerc;
-            this.vÓra = vÓra;
+            this.vOra = vOra;
             this.vPerc = vPerc;
 
 		}
@@ -43,7 +33,7 @@ namespace sqlgyak
 		public char Jazon { get => jazon;}
 		public int EOra { get => eOra; }
 		public int EPerc { get => ePerc; }
-        public int VÓra { get => vÓra; }
+        public int VOra { get => vOra; }
         public int VPerc { get => vPerc; }
 
     }
