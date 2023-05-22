@@ -1,5 +1,7 @@
 ﻿
 
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Channels;
 
 namespace sqlgyak
@@ -20,38 +22,49 @@ namespace sqlgyak
 			}
 			sr.Close();
 
-            //5.feladat
-            Console.WriteLine($"5. feladat: Napi kölcsönzések száma: {kolcsonzesek.Count}");
+			//5.feladat
+			Console.WriteLine($"5. feladat: Napi kölcsönzések száma: {kolcsonzesek.Count}");
 			//6.
 			Console.Write("6. feladat: Kérek egy nevet: ");
 			string nev = Console.ReadLine();
 
 			Console.WriteLine($"\t{nev} kölcsönzései: ");
-			if (kolcsonzesek.Count(x=> x.Nev == "Kata") == 0)
+			if (kolcsonzesek.Count(x => x.Nev == nev) == 0)
 			{
-                Console.WriteLine("Newm volt ilyen nevű kölcsönző");
-            }
+				Console.WriteLine("\tNem volt ilyen nevű kölcsönző");
+			}
 			else
 			{
-				kolcsonzesek.Where(x => x.Nev == "Kata").ToList().ForEach(x => Console.WriteLine($"\t {x.EOra}:{x.EPerc}-{x.VOra}:{x.VPerc}"));
+				kolcsonzesek.Where(x => x.Nev == nev).ToList().ForEach(x => Console.WriteLine($"\t {x.EOra}:{x.EPerc}-{x.VOra}:{x.VPerc}"));
 
-            }
+			}
 			//7
 			Console.Write("7. feladat: Adjon meg egy időpontot:perc alakban: ");
-	
 			string ido = Console.ReadLine();
+			Console.WriteLine($"\tA vizen lévő járművek: ");
+			kolcsonzesek.Where(x => x.BennVanE(ido) == true).ToList().ForEach(x => Console.WriteLine($"\t{x.EOra}:{x.EPerc}-{x.VOra}:{x.VPerc} : {x.Nev}"));
 
 
 			//8
-			int napiBevetel = kolcsonzesek.Sum(ob => ob.IdoHoszz()) / 30 + 1;
-			Console.Write($"8. feladat: Napi bevétel: {napiBevetel} Ft");
+			int napiBevetel = (kolcsonzesek.Sum(ob => ob.IdoHoszz()) / 30 + 1) * 2400;
+			Console.WriteLine($"8. feladat: Napi bevétel: {napiBevetel} Ft");
 
 
 			//9
+			List<Kolcsonzes> elkovetok = kolcsonzesek.Where(x => x.Jazon == 'F').ToList();
+			using (StreamWriter wr = new StreamWriter("F.txt"))
+			{
+                foreach (var item in elkovetok)
+                {
+					wr.WriteLine($"{item.EOra}:{item.EPerc}-{item.VOra}:{item.VPerc} : {item.Nev}");
+                }
+            }
 
 
-			//10
-			kolcsonzesek.GroupBy(x=>x.Jazon).OrderBy(x => x.Key).ToList().ForEach(x => Console.WriteLine($"{x.Key} - {x.Count()}"));
+
+            //10
+            Console.WriteLine("10. feladat: Statisztika");
+			kolcsonzesek.GroupBy(x=>x.Jazon).OrderBy(x => x.Key).ToList().ForEach(x => Console.WriteLine($"\t{x.Key} - {x.Count()}"));
 		}
 	}
 }

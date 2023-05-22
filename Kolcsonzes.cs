@@ -16,7 +16,21 @@ namespace sqlgyak
 		int vPerc;
 		public int IdoHoszz()
 		{
-			return vOra * 60 + VPerc - (EOra * 60 + ePerc);
+
+			return vOra * 60 + vPerc - (eOra * 60 + ePerc);
+		}
+		public bool BennVanE(string idopont)
+		{
+			int ora = int.Parse(idopont.Split(':')[0]);
+			int perc = int.Parse(idopont.Split(':')[1]);
+			int ido = ora*60 + perc;
+			int kezdoido = eOra * 60 + ePerc;
+			int vegzoido = vOra * 60 + vPerc;
+			if (kezdoido <= ido && vegzoido >= ido)
+			{
+				return true;
+			}
+			else { return false; }
 		}
 		public Kolcsonzes(string nev, char jazon, int eOra, int ePerc, int vOra, int vPerc )
 		{
@@ -28,6 +42,8 @@ namespace sqlgyak
             this.vPerc = vPerc;
 
 		}
+
+
 
 		public string Nev { get => nev;}
 		public char Jazon { get => jazon;}
